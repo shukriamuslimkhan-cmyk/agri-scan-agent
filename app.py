@@ -24,13 +24,44 @@ CONFIDENCE_THRESHOLD = 0.5
 # ─────────────────────────────────────────────────────────────
 # 2. CACHE MODEL LOADING (Prevents reloading on every interaction)
 # ─────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────
+# MODEL LOADER WITH AUTO-DOWNLOAD (For Streamlit Cloud)
+# ─────────────────────────────────────────────────────────────
 @st.cache_resource
 def load_yolo_model():
-    """Load YOLOv8 model with error handling"""
-    if not os.path.exists(YOLO_MODEL_PATH):
-        st.error(f"❌ Model file not found at: {os.path.abspath(YOLO_MODEL_PATH)}")
-        st.stop()
-    return YOLO(YOLO_MODEL_PATH)
+    """Load YOLOv8 model, auto-download if missing"""
+    
+    model_path = "assets/best.pt"
+    
+    # If model doesn't exist locally, try to download
+    if not os.path.exists(model_path):
+        with st.spinner("📦 Downloading AI model (first run only)..."):
+            try:
+                # Option 1: Direct GitHub Raw URL (if you upload model to GitHub)
+                # model_url = "https://raw.githubusercontent.com/YOUR_USERNAME/agri-scan-agent/main/assets/best.pt"
+                
+                # Option 2: Google Drive (public link) - convert to direct download
+                # model_url = "https://drive.google.com/uc?export=download&id=YOUR_FILE_ID"
+                
+                # Option 3: HuggingFace Hub (recommended for large files)
+                from huggingface_hub import hf_hub_download
+                
+                # Upload your best.pt to HF: https://huggingface.co/new
+                # Then use:
+                model_path = hf_hub_download(
+                    repo_id="your-username/agri-scan-models",  # Replace with your HF repo
+                    filename="best.pt",
+                    local_dir="assets"
+                )
+                
+                st.success("✅ Model downloaded successfully!")
+                
+            except Exception as e:
+                st.error(f"❌ Failed to download model: {str(e)}")
+                st.info("💡 Fallback: Using pretrained YOLOv8n for demo")
+                return YOLO("yolov8n.pt")  # Fallback to generic model
+    
+    return YOLO(model_path)
 
 # ─────────────────────────────────────────────────────────────
 # 3. GROQ AGENT FUNCTION (Treatment Plan Generator)
