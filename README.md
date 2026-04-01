@@ -193,8 +193,6 @@ Use exact severity terms in test names to keep pass/fail behavior unambiguous:
 
 <<<<<<< codex/update-readme.md-for-ci-details-dl95wc
 =======
-<<<<<<< codex/update-readme.md-for-ci-details-dwr0kz
-=======
 
 >>>>>>> main
 >>>>>>> main
@@ -281,8 +279,5 @@ See [CHANGELOG.md](CHANGELOG.md) for project history.
 No license file is currently present in this repository. Add a `LICENSE` file to define usage and distribution terms.
 <<<<<<< codex/update-readme.md-for-ci-details-dl95wc
 =======
-<<<<<<< codex/update-readme.md-for-ci-details-dwr0kz
-=======
-
 >>>>>>> main
 >>>>>>> main
